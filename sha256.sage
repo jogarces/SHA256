@@ -113,7 +113,7 @@ def process_to_chunks(chunks, k, hex_values, data):
         # Produce the final hash value (big-endian):
         digest = [(hex_value+alphabet) & TRUNCATE_CONST for hex_value, alphabet in zip(hex_values, [a, b, c, d, e, f, g, h])]
 
-    print "Real: " + hashlib.sha256(data).hexdigest()
-    print "Code: " + ''.join('{:08x}'.format(item) for item in digest)
+    print "Expected: " + hashlib.sha256(data).hexdigest()
+    print "Returned: " + ''.join('{:08x}'.format(item) for item in digest)
 
 main()
