@@ -1,5 +1,5 @@
 '''
-A SAGE implemention of SHA256
+A SAGE implementation of SHA256
 Author: Josephine Garces
 '''
 
