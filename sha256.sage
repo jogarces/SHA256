@@ -12,6 +12,7 @@ def main():
 
     sha256("manoa")
     sha256("abc")
+    sha256("00000000000000000000000000000000000000000000000000000000")
 
 
 # ror function from http://stackoverflow.com/a/27229191/2508324
@@ -98,7 +99,7 @@ def process_to_chunks(chunks, k, hex_values, data):
             temp1 = (h + s1 + ch + k[j] + w[j]) & TRUNCATE_CONST
             s0 = xor(xor(ror(a, 2), ror(a, 13)), ror(a, 22))
             maj = xor(xor((a & b), (a & c)), (b & c))
-            temp2 = s0 + maj & TRUNCATE_CONST
+            temp2 = (s0 + maj) & TRUNCATE_CONST
 
             # Add the compressed chunk to the current hash value:
             h = g
@@ -110,10 +111,13 @@ def process_to_chunks(chunks, k, hex_values, data):
             b = a
             a = (temp1 + temp2) & TRUNCATE_CONST
 
-        # Produce the final hash value (big-endian):
-        digest = [(hex_value+alphabet) & TRUNCATE_CONST for hex_value, alphabet in zip(hex_values, [a, b, c, d, e, f, g, h])]
+        # Add this chunk's hash to the result so far:
+        hex_values = [(hex_value+alphabet) & TRUNCATE_CONST for hex_value, alphabet in zip(hex_values, [a, b, c, d, e, f, g, h])]
 
-    print "Expected: " + hashlib.sha256(data).hexdigest()
-    print "Returned: " + ''.join('{:08x}'.format(item) for item in digest)
+    # Produce the final hash value (big-endian):
+    digest = hex_values
+
+    print("Expected: " + hashlib.sha256(data.encode()).hexdigest())
+    print("Returned: " + ''.join('{:08x}'.format(item) for item in digest))
 
 main()
